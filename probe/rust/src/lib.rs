@@ -109,6 +109,9 @@ fn kind_code(k: NodeKind) -> u8 {
         NodeKind::DatePicker => 20,
         NodeKind::TimePicker => 21,
         NodeKind::TextPicker => 22,
+        // Kinds the probe predates (map, shader, sdf, …). MainActivity.create()
+        // returns null for any code it does not know and reports it as UNMAPPED.
+        _ => 0xFF,
     }
 }
 

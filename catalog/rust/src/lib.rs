@@ -302,11 +302,9 @@ fn register_state(vm: &mut ScriptVm) {
 
 fn render(route: &str) -> Vec<u8> {
     let src = source_for(route);
-    let mut std_slot = 0;
-    let mut host = 0;
+    let mut host = ScriptVmHost::new((), ());
     let vm = &mut ScriptVm {
         host: &mut host,
-        std: &mut std_slot,
         bx: Box::new(ScriptVmBase::new()),
     };
     register_state(vm);
@@ -472,11 +470,9 @@ pub extern "system" fn Java_dev_octoscript_catalog_Native_routeAt<'l>(
 /// Host-side introspection for the example probe: evaluate arbitrary source
 /// through the SAME walker the JNI path uses.
 pub fn debug_walk(src: &str) -> String {
-    let mut std_slot = 0;
-    let mut host = 0;
+    let mut host = ScriptVmHost::new((), ());
     let vm = &mut ScriptVm {
         host: &mut host,
-        std: &mut std_slot,
         bx: Box::new(ScriptVmBase::new()),
     };
     let value = vm.eval(ScriptMod {
