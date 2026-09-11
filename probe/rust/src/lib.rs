@@ -1,15 +1,15 @@
-//! Splash DSL -> native android.widget.* validation probe.
+//! Octoscript DSL -> native android.widget.* validation probe.
 //!
-//! Validates the design in docs/SPLASH-ANDROID-NATIVE-WIDGETS.md §7c:
-//!   * the REAL `splash-render` crate (VM only, no makepad renderer) runs on
-//!     the device and evaluates Splash DSL into a `UiNode` tree;
+//! Validates the design in docs/OCTOSCRIPT-ANDROID-NATIVE-WIDGETS.md §7c:
+//!   * the REAL `octoscript-render` crate (VM only, no makepad renderer) runs on
+//!     the device and evaluates Octoscript DSL into a `UiNode` tree;
 //!   * the tree is serialized ONCE into a flat binary buffer;
 //!   * one JNI crossing hands Java a direct ByteBuffer;
 //!   * Java owns every `View`; Rust never holds a `jobject`.
 
 use jni::objects::{JClass, JObject};
 use jni::JNIEnv;
-use splash_render::{Attrs, NodeKind, UiNode};
+use octoscript_render::{Attrs, NodeKind, UiNode};
 use std::sync::OnceLock;
 
 /// The card under test. Deliberately *computed* — the `while` loop and the
@@ -33,7 +33,7 @@ while i < 3 {
 
 {t:"scroll", bg: bg, c: [
   {t:"column", bg: bg, pad: 16, spacing: 10, c: [
-    {t:"text", text:"Splash -> android.widget", size: 22, weight: 7, color: fg, h: 34},
+    {t:"text", text:"Octoscript -> android.widget", size: 22, weight: 7, color: fg, h: 34},
     {t:"text", text:"real VM, real Views, no makepad", size: 13, color: dim, h: 22},
 
     {t:"button", label:"Button (framework)", h: 48},
@@ -209,24 +209,24 @@ static BUF: OnceLock<Vec<u8>> = OnceLock::new();
 static DIAG: OnceLock<String> = OnceLock::new();
 
 fn build_buf() -> &'static Vec<u8> {
-    BUF.get_or_init(|| match splash_render::build(CARD, |_vm| {}) {
+    BUF.get_or_init(|| match octoscript_render::build(CARD, |_vm| {}) {
         Some(tree) => {
             let _ = DIAG.set(format!(
-                "splash-render OK: {} nodes, root={:?}",
+                "octoscript-render OK: {} nodes, root={:?}",
                 tree.count(),
                 tree.kind
             ));
             encode(&tree)
         }
         None => {
-            let _ = DIAG.set("splash-render FAILED: build() returned None".to_string());
+            let _ = DIAG.set("octoscript-render FAILED: build() returned None".to_string());
             Vec::new()
         }
     })
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_probe_Native_buildOps<'l>(
+pub extern "system" fn Java_dev_octoscript_probe_Native_buildOps<'l>(
     mut env: JNIEnv<'l>,
     _c: JClass<'l>,
 ) -> JObject<'l> {
@@ -241,7 +241,7 @@ pub extern "system" fn Java_dev_splash_probe_Native_buildOps<'l>(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_probe_Native_diag<'l>(
+pub extern "system" fn Java_dev_octoscript_probe_Native_diag<'l>(
     env: JNIEnv<'l>,
     _c: JClass<'l>,
 ) -> JObject<'l> {

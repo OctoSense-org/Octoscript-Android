@@ -1,13 +1,13 @@
-//! Splash DSL -> Material Components Android.
+//! Octoscript DSL -> Material Components Android.
 //!
-//! The catalog's screens are authored in the Splash DSL, evaluated by the
-//! makepad-script VM (via splash-render's re-export), walked into a generic
+//! The catalog's screens are authored in the Octoscript DSL, evaluated by the
+//! makepad-script VM (via octoscript-render's re-export), walked into a generic
 //! node tree, and serialized once per render into a flat buffer that Java turns
 //! into real `com.google.android.material.*` views.
 //!
 //! Java owns every View; Rust owns ids and the card state.
 
-use splash_render::makepad_script as ms;
+use octoscript_render::makepad_script as ms;
 use ms::apply::*;
 use ms::array::ScriptArrayStorage;
 use ms::makepad_live_id::*;
@@ -55,7 +55,7 @@ pub(crate) struct Node {
 }
 
 /// Every attribute name the DSL may use. LiveId keys are one-way hashes, so the
-/// vocabulary is explicit rather than discovered — the same choice splash-render
+/// vocabulary is explicit rather than discovered — the same choice octoscript-render
 /// makes, just much wider because Material needs it.
 const ATTRS_S: &[(&str, LiveId)] = &[
     ("text", live_id!(text)),
@@ -280,19 +280,19 @@ fn source_for(route: &str) -> String {
 
 /// `S(key)` -> the state string ("" when unset); `N(key, dflt)` -> its number.
 fn register_state(vm: &mut ScriptVm) {
-    let f_s = splash_render::add_global_fn(vm, &[(live_id!(k), ScriptValue::NIL)], |vm, a| {
-        let k = splash_render::string_prop(vm, a, live_id!(k)).unwrap_or_default();
+    let f_s = octoscript_render::add_global_fn(vm, &[(live_id!(k), ScriptValue::NIL)], |vm, a| {
+        let k = octoscript_render::string_prop(vm, a, live_id!(k)).unwrap_or_default();
         let v = state_get(&k);
         vm.bx.heap.new_string_from_str(&v)
     });
     vm.set_injected_global(live_id!(S), f_s);
 
-    let f_n = splash_render::add_global_fn(
+    let f_n = octoscript_render::add_global_fn(
         vm,
         &[(live_id!(k), ScriptValue::NIL), (live_id!(d), ScriptValue::NIL)],
         |vm, a| {
-            let k = splash_render::string_prop(vm, a, live_id!(k)).unwrap_or_default();
-            let d = splash_render::num_prop(vm, a, live_id!(d)).unwrap_or(0.0);
+            let k = octoscript_render::string_prop(vm, a, live_id!(k)).unwrap_or_default();
+            let d = octoscript_render::num_prop(vm, a, live_id!(d)).unwrap_or(0.0);
             let v = state_get(&k);
             ScriptValue::from_f64(v.trim().parse::<f64>().unwrap_or(d))
         },
@@ -313,7 +313,7 @@ fn render(route: &str) -> Vec<u8> {
     let value = vm.eval(ScriptMod {
         cargo_manifest_path: String::new(),
         module_path: String::from("catalog"),
-        file: format!("{route}.splash"),
+        file: format!("{route}.octoscript"),
         line: 0,
         column: 0,
         code: src.clone(),
@@ -321,7 +321,7 @@ fn render(route: &str) -> Vec<u8> {
     });
     if value.is_err() || value.is_nil() {
         let mut d = format!("route {route}: evaluated to nil/err");
-        if let Ok(r) = splash_core_check(&src) {
+        if let Ok(r) = octoscript_core_check(&src) {
             d.push_str(&r);
         }
         *DIAG.lock().unwrap() = Some(d);
@@ -339,7 +339,7 @@ fn render(route: &str) -> Vec<u8> {
     }
 }
 
-fn splash_core_check(_src: &str) -> Result<String, ()> {
+fn octoscript_core_check(_src: &str) -> Result<String, ()> {
     Err(())
 }
 
@@ -350,7 +350,7 @@ fn jstr(env: &mut JNIEnv, s: &JString) -> String {
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_render<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_render<'l>(
     mut env: JNIEnv<'l>,
     _c: JClass<'l>,
     route: JString<'l>,
@@ -374,14 +374,14 @@ pub extern "system" fn Java_dev_splash_catalog_Native_render<'l>(
 /// buffer. The DSL is not involved on this path at all: `plan::lower` builds the node
 /// tree directly from the plan.
 ///
-/// This is the portability seam. octos-one lowers the SAME plan JSON to makepad Splash
+/// This is the portability seam. octos-one lowers the SAME plan JSON to makepad Octoscript
 /// DSL; this lowers it to native Android views. If one plan drives both, the plan is
 /// genuinely backend-agnostic and the per-backend cost is a lowering table.
 ///
 /// Never returns null for a bad plan — `plan::lower` renders a visible rejection
 /// instead, because a blank screen is indistinguishable from a crash.
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_renderPlan<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_renderPlan<'l>(
     mut env: JNIEnv<'l>,
     _c: JClass<'l>,
     plan: JString<'l>,
@@ -403,7 +403,7 @@ pub extern "system" fn Java_dev_splash_catalog_Native_renderPlan<'l>(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_set<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_set<'l>(
     mut env: JNIEnv<'l>,
     _c: JClass<'l>,
     k: JString<'l>,
@@ -417,7 +417,7 @@ pub extern "system" fn Java_dev_splash_catalog_Native_set<'l>(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_get<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_get<'l>(
     mut env: JNIEnv<'l>,
     _c: JClass<'l>,
     k: JString<'l>,
@@ -431,7 +431,7 @@ pub extern "system" fn Java_dev_splash_catalog_Native_get<'l>(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_diag<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_diag<'l>(
     env: JNIEnv<'l>,
     _c: JClass<'l>,
 ) -> JObject<'l> {
@@ -444,7 +444,7 @@ pub extern "system" fn Java_dev_splash_catalog_Native_diag<'l>(
 
 /// Number of routes, so Java can build the table of contents from Rust's list.
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_routeCount<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_routeCount<'l>(
     _env: JNIEnv<'l>,
     _c: JClass<'l>,
 ) -> jint {
@@ -452,7 +452,7 @@ pub extern "system" fn Java_dev_splash_catalog_Native_routeCount<'l>(
 }
 
 #[no_mangle]
-pub extern "system" fn Java_dev_splash_catalog_Native_routeAt<'l>(
+pub extern "system" fn Java_dev_octoscript_catalog_Native_routeAt<'l>(
     env: JNIEnv<'l>,
     _c: JClass<'l>,
     i: jint,
@@ -482,7 +482,7 @@ pub fn debug_walk(src: &str) -> String {
     let value = vm.eval(ScriptMod {
         cargo_manifest_path: String::new(),
         module_path: String::from("t"),
-        file: String::from("t.splash"),
+        file: String::from("t.octoscript"),
         line: 0,
         column: 0,
         code: src.to_string(),

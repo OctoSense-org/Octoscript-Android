@@ -1,4 +1,4 @@
-package dev.splash.catalog;
+package dev.octoscript.catalog;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -43,7 +43,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Builder.Env {
 
-    static final String TAG = "SplashCatalog";
+    static final String TAG = "OctoscriptCatalog";
 
     DrawerLayout drawer;
     CoordinatorRoot root;
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements Builder.Env {
     /**
      * Semantic-PLAN routes, listed first on the ToC.
      *
-     * These render the SAME typed JSON octos-one's LLM emits — no Splash DSL involved.
+     * These render the SAME typed JSON octos-one's LLM emits — no Octoscript DSL involved.
      * Everything below them in the list is DSL-authored, so the two paths sit side by
      * side in one build.
      */
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements Builder.Env {
 
         AppCompatTextView h = new AppCompatTextView(this);
         TextViewCompat.setTextAppearance(h, R.style.TextAppearance_Material3_BodyMedium);
-        h.setText("Every screen below is authored in the Splash DSL, evaluated on device by the "
+        h.setText("Every screen below is authored in the Octoscript DSL, evaluated on device by the "
                 + "makepad-script VM, and rendered as real Material Components views.");
         h.setPadding(0, dp(8), 0, dp(16));
         col.addView(h);

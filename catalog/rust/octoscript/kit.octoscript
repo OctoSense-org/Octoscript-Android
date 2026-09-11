@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Shared kit: helpers every catalog screen composes from. Pure Splash DSL —
+// Shared kit: helpers every catalog screen composes from. Pure Octoscript DSL —
 // evaluated on device by the makepad-script VM, walked into Material views.
 // ---------------------------------------------------------------------------
 

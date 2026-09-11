@@ -1,4 +1,4 @@
-package dev.splash.probe;
+package dev.octoscript.probe;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -16,16 +16,16 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Splash UiNode -> real android.widget.* views.
+ * Octoscript UiNode -> real android.widget.* views.
  *
- * Validates docs/SPLASH-ANDROID-NATIVE-WIDGETS.md 7c:
+ * Validates docs/OCTOSCRIPT-ANDROID-NATIVE-WIDGETS.md 7c:
  *  - Java owns every View (this SparseArray). Rust never holds a jobject.
  *  - Rust owns integer ids only.
  *  - One JNI crossing delivers the whole tree as a direct ByteBuffer.
  */
 public class MainActivity extends Activity {
 
-    static final String TAG = "SplashProbe";
+    static final String TAG = "OctoscriptProbe";
 
     // Java owns the Views. This is the whole ownership model.
     private final SparseArray<View> views = new SparseArray<>();

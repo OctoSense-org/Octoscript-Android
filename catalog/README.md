@@ -1,17 +1,17 @@
-# Splash Catalog — the Material Components Android catalog, driven by Splash DSL
+# Octoscript Catalog — the Material Components Android catalog, driven by Octoscript DSL
 
 A reproduction of [material-components-android](https://github.com/material-components/material-components-android)'s
-catalog app in which **every screen is authored in the Splash DSL, evaluated on
+catalog app in which **every screen is authored in the Octoscript DSL, evaluated on
 device by the makepad-script VM, and rendered as real
 `com.google.android.material.*` views.**
 
-No makepad renderer. No GL surface. No `Splash` widget. The only makepad code in
+No makepad renderer. No GL surface. No `Octoscript` widget. The only makepad code in
 the process is the language VM.
 
 ```
 41 .splash screens
    │
-   ▼  makepad-script VM (via splash-render's re-export)   ── Rust
+   ▼  makepad-script VM (via octoscript-render's re-export)   ── Rust
 generic node tree  (kind + attr bag + children)
    │
    ▼  flat binary buffer, one direct ByteBuffer
@@ -24,11 +24,11 @@ Java builder → MaterialButton / Chip / TextInputLayout / Slider / …   ──
 
 ```sh
 cd rust && cargo build --release --target aarch64-linux-android   # needs the NDK env
-cp target/aarch64-linux-android/release/libsplash_catalog.so ../app/src/main/jniLibs/arm64-v8a/
+cp target/aarch64-linux-android/release/liboctoscript_catalog.so ../app/src/main/jniLibs/arm64-v8a/
 cd .. && gradle assembleDebug && adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Deep-link any screen: `adb shell am start -n dev.splash.catalog/.MainActivity --es route button`
+Deep-link any screen: `adb shell am start -n dev.octoscript.catalog/.MainActivity --es route button`
 
 Host-side check of every route without a device: `cd rust && cargo run --release --example probe`
 
@@ -65,7 +65,7 @@ views. The DSL — not Java — decides what the screen says.
 
 ## VM constraints discovered (the hard-won part)
 
-The makepad-script rev `e1c2164b` that `splash-render` pins has three shapes
+The makepad-script rev `e1c2164b` that `octoscript-render` pins has three shapes
 that silently produce a wrong tree rather than an error. All were found by
 host-side probing (`examples/probe.rs`) after they showed up as blank screens:
 
@@ -76,7 +76,7 @@ host-side probing (`examples/probe.rs`) after they showed up as blank screens:
 | `st.missing_key` on a plain object | hard VM error, whole eval fails | a host function that returns a default — see `S()` / `N()` |
 
 `S(key)` / `N(key, default)` are injected as VM globals (`set_injected_global`),
-exactly as Splash-OH injects its network helpers. That is also why state reads
+exactly as Octoscript-OH injects its network helpers. That is also why state reads
 cannot fail: a missing key returns `""` / the default instead of killing the
 evaluation.
 
@@ -90,7 +90,7 @@ Helper functions that **return objects** are fine — `section()`, `caption()`,
   structurally unreachable.
 - **One JNI crossing per render.** The whole tree travels as a flat buffer in a
   direct `ByteBuffer`; strings live in a side blob addressed by (offset, len).
-- **Generic attribute bag, not a fixed struct.** `splash-render`'s `Attrs` has ~30
+- **Generic attribute bag, not a fixed struct.** `octoscript-render`'s `Attrs` has ~30
   fixed fields; 43 Material components need far more, so this walker carries
   `Vec<(String, Val)>` against an explicit ~56-name vocabulary. LiveId keys are
   one-way hashes, so the vocabulary must be declared, not discovered.
