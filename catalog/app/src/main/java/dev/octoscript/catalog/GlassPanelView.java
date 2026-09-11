@@ -1,4 +1,4 @@
-package dev.splash.catalog;
+package dev.octoscript.catalog;
 
 import android.content.Context;
 import android.graphics.Canvas;

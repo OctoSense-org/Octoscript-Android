@@ -1,4 +1,4 @@
-package dev.splash.catalog;
+package dev.octoscript.catalog;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Decoded Splash node. Mirrors the encoder in rust/src/lib.rs. */
+/** Decoded Octoscript node. Mirrors the encoder in rust/src/lib.rs. */
 public final class Node {
     public int id;
     public String kind;

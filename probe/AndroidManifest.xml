@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.splash.probe">
+    package="dev.octoscript.probe">
     <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="30" />
-    <application android:label="SplashProbe" android:hardwareAccelerated="true">
+    <application android:label="OctoscriptProbe" android:hardwareAccelerated="true">
         <activity android:name=".MainActivity" android:exported="true"
                   android:theme="@android:style/Theme.Material">
             <intent-filter>

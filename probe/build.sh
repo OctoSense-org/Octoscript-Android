@@ -26,7 +26,7 @@ echo "== d8 =="
   $(find "$OUT/classes" -name '*.class')
 
 echo "== assemble =="
-cp "$HERE/rust/target/aarch64-linux-android/release/libsplash_android_probe.so" \
+cp "$HERE/rust/target/aarch64-linux-android/release/liboctoscript_android_probe.so" \
    "$OUT/apk/lib/arm64-v8a/"
 cd "$OUT"
 cp base.apk probe.apk
@@ -36,7 +36,7 @@ cd "$OUT"
 # add dex at archive root and the .so under lib/
 mkdir -p stage/lib/arm64-v8a
 cp classes.dex stage/
-cp apk/lib/arm64-v8a/libsplash_android_probe.so stage/lib/arm64-v8a/
+cp apk/lib/arm64-v8a/liboctoscript_android_probe.so stage/lib/arm64-v8a/
 cd stage && zip -q -r -X "$OUT/probe.apk" classes.dex lib && cd "$OUT"
 
 echo "== align + sign =="

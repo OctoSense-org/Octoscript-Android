@@ -1,4 +1,4 @@
-use splash_catalog::{debug_route, routes};
+use octoscript_catalog::{debug_route, routes};
 fn main() {
     let mut bad = 0;
     for (r, _t) in routes() {

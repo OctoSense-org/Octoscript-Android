@@ -1,11 +1,11 @@
 plugins { id 'com.android.application' }
 
 android {
-    namespace 'dev.splash.catalog'
+    namespace 'dev.octoscript.catalog'
     compileSdk 35
 
     defaultConfig {
-        applicationId "dev.splash.catalog"
+        applicationId "dev.octoscript.catalog"
         minSdk 26
         targetSdk 35
         versionCode 1

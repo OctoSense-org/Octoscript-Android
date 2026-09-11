@@ -1,7 +1,7 @@
 //! Semantic plans → native Android views.
 //!
 //! The portability proof. An LLM in octos-one emits a ~600-byte typed **plan**; that
-//! runtime lowers it to makepad Splash DSL. This lowers the SAME plan JSON to this
+//! runtime lowers it to makepad Octoscript DSL. This lowers the SAME plan JSON to this
 //! backend's node tree, which Java turns into `android.widget.*` /
 //! `com.google.android.material.*` views. No DSL is involved on this path at all —
 //! plan straight to nodes.

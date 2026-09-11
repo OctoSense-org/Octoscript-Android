@@ -1,4 +1,4 @@
-package dev.splash.catalog;
+package dev.octoscript.catalog;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -48,7 +48,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Splash node tree -> real Material Components views. */
+/** Octoscript node tree -> real Material Components views. */
 public class Builder {
 
     public interface Env {
@@ -1001,8 +1001,8 @@ public class Builder {
             // rather than leaving dead space under a small card.
             // `h` is the collapsed height (the parent's addChildren sets it);
             // `max` is what expanding animates to.
-            host.setTag(R.id.splash_expanded_h, dp(n.f("max", 240)));
-            host.setTag(R.id.splash_collapsed_h, dp(n.f("h", 96)));
+            host.setTag(R.id.octoscript_expanded_h, dp(n.f("max", 240)));
+            host.setTag(R.id.octoscript_collapsed_h, dp(n.f("h", 96)));
             host.addView(containerCollapsed(host));
         } else {
             host.addView(stagePane(0));
@@ -1074,7 +1074,7 @@ public class Builder {
     }
 
     void expandContainer(FrameLayout host, View start) {
-        Object tag = host.getTag(R.id.splash_expanded_h);
+        Object tag = host.getTag(R.id.octoscript_expanded_h);
         animateHostHeight(host, tag instanceof Integer ? (Integer) tag : dp(220));
         View end = containerExpanded(host);
         com.google.android.material.transition.MaterialContainerTransform tr =
@@ -1090,7 +1090,7 @@ public class Builder {
     }
 
     void collapseContainer(FrameLayout host, View start) {
-        Object ct = host.getTag(R.id.splash_collapsed_h);
+        Object ct = host.getTag(R.id.octoscript_collapsed_h);
         animateHostHeight(host, ct instanceof Integer ? (Integer) ct : dp(96));
         View end = containerCollapsed(host);
         com.google.android.material.transition.MaterialContainerTransform tr =

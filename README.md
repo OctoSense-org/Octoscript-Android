@@ -1,12 +1,12 @@
-# Splash-Android
+# Octoscript-Android
 
-Splash DSL rendered to **native Android widgets** from Rust — the Android peer of
-[Splash-OH](https://github.com/ymote/Splash-OH), which does the same against
+Octoscript DSL rendered to **native Android widgets** from Rust — the Android peer of
+[Octoscript-OH](https://github.com/OctoSense-org/Octoscript-OH), which does the same against
 OpenHarmony's ArkUI.
 
 ```
-probe/      the feasibility probe   — splash-render -> android.widget.*, framework widgets only
-catalog/    the Material catalog    — 42 screens of Splash DSL -> com.google.android.material.*
+probe/      the feasibility probe   — octoscript-render -> android.widget.*, framework widgets only
+catalog/    the Material catalog    — 42 screens of Octoscript DSL -> com.google.android.material.*
 ```
 
 Both run on device (OnePlus 6T, Android 11 / SDK 30).
@@ -14,8 +14,8 @@ Both run on device (OnePlus 6T, Android 11 / SDK 30).
 ## The shape
 
 ```
-.splash  ──►  makepad-script VM  ──►  node tree  ──►  flat buffer  ──►  Java builder  ──►  Views
-              (via splash-render;        (Rust)      ONE JNI call      (owns every View)
+.octoscript  ──►  makepad-script VM  ──►  node tree  ──►  flat buffer  ──►  Java builder  ──►  Views
+              (via octoscript-render;        (Rust)      ONE JNI call      (owns every View)
                no makepad renderer)
 ```
 
@@ -28,24 +28,24 @@ There is no makepad renderer in the process — no `makepad-platform`, no
 in is `makepad-script`, the language VM, whose own dependencies are
 `error_log`, `math`, `live_id`, `script-derive`, `smallvec`, `regex`, `html`.
 
-## Why Android is not a port of Splash-OH
+## Why Android is not a port of Octoscript-OH
 
 OpenHarmony ships `arkui/native_node.h` — a C NDK for widget construction.
 **Android has no equivalent**: 62 headers in the NDK's `android/` directory,
 none of them a widget API. Every `android.widget.*` object must be constructed
 through JNI into ART, and unlike ArkUI there is no native tier beneath the
-managed object. So Splash-OH's 2.5–3× construction win does not transfer, and the
+managed object. So Octoscript-OH's 2.5–3× construction win does not transfer, and the
 design goal here is *minimising boundary crossings*, not avoiding managed-language
 objects.
 
-See `docs/` in octos-one (`SPLASH-ANDROID-NATIVE-WIDGETS.md`) for the full
+See `docs/` in octos-one (`OCTOSCRIPT-ANDROID-NATIVE-WIDGETS.md`) for the full
 analysis.
 
 ## catalog/
 
 A reproduction of
 [material-components-android](https://github.com/material-components/material-components-android)'s
-catalog: **42 screens**, every one authored in the Splash DSL and evaluated on
+catalog: **42 screens**, every one authored in the Octoscript DSL and evaluated on
 device. Includes real `MaterialAlertDialogBuilder` / `Snackbar` /
 `MaterialDatePicker` / `MaterialTimePicker` / `BottomSheetDialog` /
 `SideSheetDialog` / `PopupMenu` / `DrawerLayout`, a real Carousel, and live
@@ -67,7 +67,7 @@ androidx and Material available at all); the probe builds an APK by hand with
 ```sh
 # catalog
 cd catalog/rust && cargo build --release --target aarch64-linux-android
-cp target/aarch64-linux-android/release/libsplash_catalog.so ../app/src/main/jniLibs/arm64-v8a/
+cp target/aarch64-linux-android/release/liboctoscript_catalog.so ../app/src/main/jniLibs/arm64-v8a/
 cd .. && gradle assembleDebug && adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 # probe
@@ -86,7 +86,7 @@ cd catalog/rust && cargo run --release --example probe   # evaluates all 42 rout
 - ✅ Material catalog — 42 screens, 0 placeholders, 0 exceptions on device
 - ✅ octos-one widget ports — WeatherIcon (8 conditions), MapView (3 nav modes), glass panels
 - ⏳ the `UiNode` delta/event contract — construction is done; incremental updates are not
-- ⏳ `splash-render` upstreaming: a `Native`/`Custom` node kind, a `key` attribute
+- ⏳ `octoscript-render` upstreaming: a `Native`/`Custom` node kind, a `key` attribute
   for reconciliation, and `Serialize` derives
 
 ## Licence
