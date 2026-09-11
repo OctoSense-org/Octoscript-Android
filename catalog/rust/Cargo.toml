@@ -8,7 +8,7 @@ name = "octoscript_catalog"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-octoscript-render = { path = "/Users/yuechen/home/Octoscript-Makepad/crates/octoscript-render" }
+octoscript-render = { git = "https://github.com/OctoSense-org/Octoscript-Makepad.git", branch = "main" }
 jni = "0.21"
 serde_json = "1.0.151"
 ureq = { version = "2", features = ["tls"] }

@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 # The real thing: the backend-agnostic Octoscript renderer core. Depends only on
 # makepad-script (the VM). No makepad-platform / draw / widgets anywhere.
 [dependencies]
-octoscript-render = { path = "/Users/yuechen/home/Octoscript-Makepad/crates/octoscript-render" }
+octoscript-render = { git = "https://github.com/OctoSense-org/Octoscript-Makepad.git", branch = "main" }
 jni = "0.21"
 
 [profile.release]
