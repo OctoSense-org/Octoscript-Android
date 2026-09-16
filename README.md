@@ -1,5 +1,21 @@
 # Octoscript-Android
 
+## Shared Octoscript-Makepad runtime
+
+`native-runtime.lock.json` selects one
+[Octoscript-Makepad](https://github.com/OctoSense-org/Octoscript-Makepad)
+release. Its `runtime.json` owns the exact Makepad and Octoscript revisions,
+shared with AppCards, Mail and the other OctoSense applications.
+
+Before building, run `python3 tools/setup-native.py` (Python 3.9+). The framework
+repositories are siblings of this app: `../octoscript-makepad`, `../makepad`
+and `../octoscript`. Local changes are preserved; `--update` only updates clean
+checkouts. CI verifies the selected release and rejects duplicate Makepad sources.
+Use `python3 tools/setup-native.py --check --cargo-manifest catalog/rust/Cargo.toml`
+to check the local dependency graph. Existing platform rendering backends remain
+part of their applications; the framework controls the shared VM and UI sources.
+
+
 Octoscript DSL rendered to **native Android widgets** from Rust — the Android peer of
 [Octoscript-OH](https://github.com/OctoSense-org/Octoscript-OH), which does the same against
 OpenHarmony's ArkUI.
