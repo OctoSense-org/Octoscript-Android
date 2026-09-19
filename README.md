@@ -107,4 +107,6 @@ cd catalog/rust && cargo run --release --example probe   # evaluates all 42 rout
 
 ## Licence
 
-MIT OR Apache-2.0, matching makepad.
+Apache-2.0 (see [LICENSE](LICENSE) and [NOTICE](NOTICE)). Drawables taken from the
+material-components-android catalog keep their original Android Open Source Project
+copyright headers (also Apache-2.0).

@@ -1,0 +1,16 @@
+Octoscript-Android
+Copyright 2026 The OctoSense Authors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party components
+----------------------
+
+catalog/app/src/main/res/drawable: many of the vector drawables are taken from
+the material-components-android catalog
+(https://github.com/material-components/material-components-android).
+They are Copyright The Android Open Source Project, licensed under the
+Apache License, Version 2.0, and carry their original copyright headers.
+
+Dependencies (for example AndroidX and Material Components for Android)
+retain their respective licenses.
