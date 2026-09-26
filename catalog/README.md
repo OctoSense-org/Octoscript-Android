@@ -1,5 +1,7 @@
 # Octoscript Catalog — the Material Components Android catalog, driven by Octoscript DSL
 
+English | [简体中文](README.zh-CN.md)
+
 A reproduction of [material-components-android](https://github.com/material-components/material-components-android)'s
 catalog app in which **every screen is authored in the Octoscript DSL, evaluated on
 device by the makepad-script VM, and rendered as real
@@ -9,7 +11,7 @@ No makepad renderer. No GL surface. No `Octoscript` widget. The only makepad cod
 the process is the language VM.
 
 ```
-41 .splash screens
+42 .octoscript screens
    │
    ▼  makepad-script VM (via octoscript-render's re-export)   ── Rust
 generic node tree  (kind + attr bag + children)
