@@ -1,5 +1,7 @@
 # Octoscript-Android
 
+English | [简体中文](README.zh-CN.md)
+
 ## Shared Octoscript-Makepad runtime
 
 `native-runtime.lock.json` selects one
